@@ -11,6 +11,7 @@ var http = require('http'),
 	port = process.env.PORT || config.port,
 	user = require('./app/routers/user'),
 	chat = require('./app/routers/chat'),
+	chatRoomRouter = require('./app/routers/chatRoomRouter'),
 	app = express(),
 	server = http.createServer(app),
 	socketioServer = socketio.listen(server);
@@ -28,7 +29,7 @@ app.use(passport.session());
 
 app.use('/api', user(express, require('./config/passport')(passport)));
 app.use('/api', chat(express));
-
+app.use(chatRoomRouter(express));
 require('./config/socket')(socketioServer);
 
 server.listen(port, function() {
