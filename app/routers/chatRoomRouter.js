@@ -1,9 +1,9 @@
 var TopicChatRoomModel = require('../models/topicChatRoomModel');
-
+var middleware = require('../../config/middleware');
 
 module.exports = function(express) {
 	var router = express.Router();
-	router.post('/createTopicChatRoom', TopicChatRoomModel.createTopicChatRoom, function(req, res) {
+	router.post('/createTopicChatRoom', middleware.authentication, TopicChatRoomModel.createTopicChatRoom, function(req, res) {
 		console.log(req.topicChatRoom);
 		res.json({
 			status: true,

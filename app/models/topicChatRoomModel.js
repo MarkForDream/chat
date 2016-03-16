@@ -7,7 +7,7 @@ TopicChatRoomModel.prototype.createTopicChatRoom = function(req, res, next) {
 	var body = req.body;
 	
 	var memberIdList = body.memberIdList;
-	console.log("memberIdList::" + JSON.stringify(memberIdList));
+	// console.log("memberIdList::" + JSON.stringify(memberIdList));
 	var members = [];
 
 	for (var index in memberIdList) {
