@@ -20,14 +20,18 @@ TopicChatRoomModel.prototype.createTopicChatRoom = function(req, res, next) {
 			var memberIdList = body.memberIdList;
 			var members = [];
 
+			members.push({
+				user_id: req.user._id,
+				inviter: req.user_id,
+				status: CONSTANT.JOINED
+			});
+
 			for (var index in memberIdList) {
-				
-				var status = (memberIdList[index].memberId == req.user._id) ? CONSTANT.JOINED : CONSTANT.PENDING;
 				
 				members.push({
 					user_id: memberIdList[index].memberId,
 					inviter: req.user._id,
-					status: status
+					status: CONSTANT.PENDING
 				});
 			}
 
@@ -56,13 +60,36 @@ TopicChatRoomModel.prototype.getMyTopicChatRooms = function(req, res, next) {
 	TopicChatRoom.find({'creator': req.user._id})
 			 .select({updated_at: false, __v: false})
 	 		 .exec(function(err, topicChatRooms) {
-					if (err) return res.json(err);
+					if (err) return res.json(ConfigError + ':' + err);
 					req.topicChatRooms = topicChatRooms;
 
 					return next();
 				});
 };
 
+TopicChatRoomModel.prototype.getPublicChatRooms = function(req, res, next) {
+	TopicChatRoom.find({'access': 1})
+			 .select({updated_at: false, __v: false})
+			 .exec(function(err, publicChatRooms) {
+			 	if (err) return res.json(ConfigError + ':' + err);
+			 	req.publicChatRooms = publicChatRooms;
+			 	return next();
+			 });
+};
 
+TopicChatRoomModel.prototype.joinChatRoom = function(req, res, next) {
+	
+	req.checkBody('roomId', 'RoomId is required').notEmpty();
+	req.checkBody('roomId', 'The format of roomId is invalid').validateMongoID();
+
+	TopicChatRoom.update({'_id': req.body.roomId, 'members.user_id': req.user._id}, {
+				'$set': {'members.$.status': CONSTANT.JOINED}
+			 })
+			 .exec(function(err) {
+			 	if(err) return res.json(ConfigError);
+
+			 	return next();
+			 });
+};
 
 module.exports = new TopicChatRoomModel();

@@ -33,11 +33,12 @@ module.exports = function(express) {
 		});
 	});
 
-	router.post('/getPublicChatRooms', function(req, res) {
+	router.post('/getPublicChatRooms', middleware.authentication, TopicChatRoomModel.getPublicChatRooms, function(req, res) {
 		res.json({
 			status: true,
 			result: {
-				"msg": "Successfully Created Chat Room"
+				"msg": "Successfully get public chatrooms",
+				"publicRoomList": req.publicChatRooms
 			}
 		});
 	});
@@ -51,11 +52,11 @@ module.exports = function(express) {
 		});
 	});
 
-	router.post('/joinChatRoom', function(req, res) {
+	router.post('/joinChatRoom', middleware.authentication, TopicChatRoomModel.joinChatRoom, function(req, res) {
 		res.json({
 			status: true,
 			result: {
-				"msg": "Successfully Created Chat Room"
+				"msg": "Successfully joined chat room"
 			}
 		});
 	});
