@@ -4,7 +4,7 @@ var middleware = require('../../config/middleware');
 module.exports = function(express) {
 	var router = express.Router();
 	router.post('/createTopicChatRoom', middleware.authentication, TopicChatRoomModel.createTopicChatRoom, function(req, res) {
-		console.log(req.topicChatRoom);
+		
 		res.json({
 			status: true,
 			result: {
@@ -22,12 +22,13 @@ module.exports = function(express) {
 		});
 	});
 
-	router.post('/getMyTopicChatRooms', function(req, res) {
+	router.post('/getMyTopicChatRooms', middleware.authentication, TopicChatRoomModel.getMyTopicChatRooms, function(req, res) {
 		console.log(res.topicChatRooms);
 		res.json({
 			status: true,
 			result: {
-				"msg": "Successfully Created Chat Room"
+				"msg": "Successfully get topic chatrooms",
+				"topicChatRoomList":  req.topicChatRooms
 			}
 		});
 	});

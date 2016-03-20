@@ -34,7 +34,7 @@ TopicChatRoomModel.prototype.createTopicChatRoom = function(req, res, next) {
 			var topicChatRoom = new TopicChatRoom();
 			topicChatRoom.title = body.title;
 			topicChatRoom.description = body.description;
-			topicChatRoom.creator = req.user.name;
+			topicChatRoom.creator = req.user._id;
 			topicChatRoom.access = body.access;
 			topicChatRoom.members = members;
 			topicChatRoom.save(function(err) {
@@ -52,13 +52,15 @@ TopicChatRoomModel.prototype.createTopicChatRoom = function(req, res, next) {
 
 };
 
-TopicChatRoomModel.prototype.getTopicChatRooms = function(req, res, next) {
-	TopicChatRoom.find({}, function(err, topicChatRooms) {
-		if (err) return res.json(err);
-		req.topicChatRooms = topicChatRooms;
+TopicChatRoomModel.prototype.getMyTopicChatRooms = function(req, res, next) {
+	TopicChatRoom.find({'creator': req.user._id})
+			 .select({updated_at: false, __v: false})
+	 		 .exec(function(err, topicChatRooms) {
+					if (err) return res.json(err);
+					req.topicChatRooms = topicChatRooms;
 
-		return next();
-	});
+					return next();
+				});
 };
 
 
