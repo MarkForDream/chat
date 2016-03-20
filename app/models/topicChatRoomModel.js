@@ -1,39 +1,54 @@
-var TopicChatRoom = require('./topicChatRoomSchema');
+var TopicChatRoom = require('../schemas/topicChatRoomSchema');
+var CONSTANT = require('../constants/constant');
 var Config = require('../../config/config');
 var ConfigError = Config.error;
+var ValidationErrorsResponse = require('../../config/error');
 var TopicChatRoomModel = function() {};
 
 TopicChatRoomModel.prototype.createTopicChatRoom = function(req, res, next) {
 	var body = req.body;
 	
-	var memberIdList = body.memberIdList;
-	// console.log("memberIdList::" + JSON.stringify(memberIdList));
-	var members = [];
+	req.checkBody('title', 'Title is required.').notEmpty();
+	req.checkBody('access', 'Access status should be specified.').notEmpty();
 
-	for (var index in memberIdList) {
-		
-		var status = memberIdList[index].memberId == "Mark" ? 0 : 2;
-		
-		members.push({
-			user_id: memberIdList[index].memberId,
-			inviter: "Mark",
-			status: status
+	req.sanitizeBody('title').trim();
+	req.sanitizeBody('description').trim();
+
+	req.asyncValidationErrors()
+		.then(function() {
+
+			var memberIdList = body.memberIdList;
+			var members = [];
+
+			for (var index in memberIdList) {
+				
+				var status = (memberIdList[index].memberId == req.user._id) ? CONSTANT.JOINED : CONSTANT.PENDING;
+				
+				members.push({
+					user_id: memberIdList[index].memberId,
+					inviter: req.user._id,
+					status: status
+				});
+			}
+
+			var topicChatRoom = new TopicChatRoom();
+			topicChatRoom.title = body.title;
+			topicChatRoom.description = body.description;
+			topicChatRoom.creator = req.user.name;
+			topicChatRoom.access = body.access;
+			topicChatRoom.members = members;
+			topicChatRoom.save(function(err) {
+				if (err) return res.json(ConfigError);
+				req.topicChatRoom = topicChatRoom;
+				return next();
+			});
+		})
+		.catch(function(err) {
+			return res.json(ValidationErrorsResponse(err, {
+				title: null,
+				access: null
+			}));
 		});
-	}
-
-	var topicChatRoom = new TopicChatRoom();
-	topicChatRoom.title = body.title;
-	topicChatRoom.description = body.description;
-	// topicChatRoom.creator = "mark";
-	topicChatRoom.creator = "Mark";
-	topicChatRoom.access = body.access;
-	topicChatRoom.members = members;
-	topicChatRoom.save(function(err) {
-		console.error(err);
-		if (err) return res.json(ConfigError);
-		req.topicChatRoom = topicChatRoom;
-		return next();
-	});
 
 };
 

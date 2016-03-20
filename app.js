@@ -15,7 +15,7 @@ var http = require('http'),
 	app = express(),
 	server = http.createServer(app),
 	socketioServer = socketio.listen(server);
-
+var expressValidatorOptions = require('./app/validators/custom');
 var winston = require('winston');
 var expressWinston = require('express-winston');
 
@@ -26,7 +26,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(methodOverride('X-HTTP-Method-Override'));
 app.use(expressSession({secret: 'markfordream', saveUninitialized: true, resave: true, cookie: {maxAge: 3600000}}));
-app.use(expressValidator(require('./app/validators/custom')));
+app.use(expressValidator(expressValidatorOptions));
 app.use(express.static(__dirname + '/public'));
 app.use(passport.initialize());
 app.use(passport.session());

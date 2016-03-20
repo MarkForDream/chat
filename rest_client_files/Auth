@@ -1,0 +1,30 @@
+{
+	"id": "f0b76b97-63e4-2a5f-8a4d-985923e69787",
+	"name": "Auth",
+	"requests": [
+		{
+			"id": "2714ac48-f8e2-cc81-d84b-301487478eee",
+			"headers": "Content-Type: application/json\n",
+			"url": "http://localhost:5555/api/local-login",
+			"preRequestScript": "",
+			"pathVariables": {},
+			"method": "POST",
+			"data": [],
+			"dataMode": "raw",
+			"version": 2,
+			"tests": "",
+			"currentHelper": "normal",
+			"helperAttributes": {},
+			"time": 1458459471953,
+			"name": "local_login",
+			"description": "",
+			"collectionId": "f0b76b97-63e4-2a5f-8a4d-985923e69787",
+			"responses": [],
+			"rawModeData": "{\n    \"email\": \"donaldduck518@gmail.com\",\n    \"password\" : \"123456\"\n}"
+		}
+	],
+	"order": [
+		"2714ac48-f8e2-cc81-d84b-301487478eee"
+	],
+	"timestamp": 1458459179552
+}
