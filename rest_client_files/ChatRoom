@@ -1,7 +1,38 @@
 {
 	"id": "8ec2817e-5106-14fd-6900-fe2f17e2750a",
 	"name": "ChatRoom",
+	"description": "",
+	"order": [
+		"f5ac7db1-82d6-f8f1-fbf6-775e094cdeb1",
+		"7146eae0-25d3-4743-9e69-e91d040aafa0"
+	],
+	"folders": [],
+	"timestamp": 1458459496399,
+	"owner": "",
+	"remoteLink": "",
+	"public": false,
 	"requests": [
+		{
+			"id": "7146eae0-25d3-4743-9e69-e91d040aafa0",
+			"headers": "",
+			"url": "http://localhost:5555/getMyTopicChatRooms",
+			"pathVariables": {},
+			"preRequestScript": "",
+			"method": "POST",
+			"collectionId": "8ec2817e-5106-14fd-6900-fe2f17e2750a",
+			"data": [],
+			"dataMode": "raw",
+			"name": "get_my_topic_chatrooms",
+			"description": "",
+			"descriptionFormat": "html",
+			"time": 1458465157021,
+			"version": 2,
+			"responses": [],
+			"tests": "",
+			"currentHelper": "normal",
+			"helperAttributes": {},
+			"rawModeData": ""
+		},
 		{
 			"id": "f5ac7db1-82d6-f8f1-fbf6-775e094cdeb1",
 			"headers": "Content-Type: application/json\n",
@@ -22,9 +53,5 @@
 			"responses": [],
 			"rawModeData": "{\n    \"title\": \"Baseball\",\n    \"description\" : \"cool\",\n    \"access\" : 1\n\n}"
 		}
-	],
-	"order": [
-		"f5ac7db1-82d6-f8f1-fbf6-775e094cdeb1"
-	],
-	"timestamp": 1458459496399
+	]
 }
