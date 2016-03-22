@@ -77,19 +77,40 @@ TopicChatRoomModel.prototype.getPublicChatRooms = function(req, res, next) {
 			 });
 };
 
-TopicChatRoomModel.prototype.joinChatRoom = function(req, res, next) {
+TopicChatRoomModel.prototype.getRelevantChatRooms = function(req, res, next) {
+	TopicChatRoom.find({'members.user_id': req.user._id})
+			 .select({updated_at: false, __v: false})
+			 .exec(function(err, relevantChatRooms) {
+			 	if (err) return res.json(ConfigError + ':' + err);
+			 	req.relevantChatRooms = relevantChatRooms;
+			 	return next();
+			 });
+};
+
+TopicChatRoomModel.prototype.respondChatRoom = function(req, res, next) {
 	
 	req.checkBody('roomId', 'RoomId is required').notEmpty();
 	req.checkBody('roomId', 'The format of roomId is invalid').validateMongoID();
 
-	TopicChatRoom.update({'_id': req.body.roomId, 'members.user_id': req.user._id}, {
-				'$set': {'members.$.status': CONSTANT.JOINED}
+	req.checkBody('roomStatus', 'Room status should be specified').notEmpty();
+	req.asyncValidationErrors()
+		.then(function() {
+			TopicChatRoom.update({'_id': req.body.roomId, 'members.user_id': req.user._id}, {
+				'$set': {'members.$.status': req.body.roomStatus}
 			 })
 			 .exec(function(err) {
 			 	if(err) return res.json(ConfigError);
 
 			 	return next();
 			 });
+		})
+		.catch(function(err) {
+			return res.json(ValidationErrorsResponse(err, {
+				roomId: null,
+				roomStatus: null
+			}));
+		});
+	
 };
 
 module.exports = new TopicChatRoomModel();
