@@ -47,7 +47,7 @@ module.exports = function(express) {
 		res.json({
 			status: true,
 			result: {
-				"msg": "Successfully Created Chat Room",
+				"msg": "Successfully get relevant chatrooms",
 				"relevantChatRoomList": req.relevantChatRooms
 			}
 		});
@@ -57,16 +57,16 @@ module.exports = function(express) {
 		res.json({
 			status: true,
 			result: {
-				"msg": "Successfully joined chat room"
+				"msg": "Successfully respond to the chatroom"
 			}
 		});
 	});
 
-	router.post('/inviteIntoChatRoom', function(req, res) {
+	router.post('/inviteIntoChatRoom', middleware.authentication, TopicChatRoomModel.inviteIntoChatRoom, function(req, res) {
 		res.json({
 			status: true,
 			result: {
-				"msg": "Successfully Created Chat Room"
+				"msg": "Successfully invite into the chatroom"
 			}
 		});
 	});

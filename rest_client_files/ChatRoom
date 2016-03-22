@@ -8,7 +8,8 @@
 		"93863e3f-9c11-ef3b-f2b3-1f1adbf118ea",
 		"1522879b-ea0a-3a68-1777-04066dd6a314",
 		"afa90d50-da4f-1d37-d07a-b2de318c2c2b",
-		"3834ef18-47cb-f0fc-8b3f-2e27eddeeae9"
+		"3834ef18-47cb-f0fc-8b3f-2e27eddeeae9",
+		"e8b3dcce-02ed-3af9-0b6c-923db02817d0"
 	],
 	"folders": [],
 	"timestamp": 1458459496399,
@@ -115,6 +116,25 @@
 			"currentHelper": "normal",
 			"helperAttributes": {},
 			"rawModeData": ""
+		},
+		{
+			"id": "e8b3dcce-02ed-3af9-0b6c-923db02817d0",
+			"headers": "Content-Type: application/json\n",
+			"url": "http://localhost:5555/inviteIntoChatRoom",
+			"preRequestScript": null,
+			"pathVariables": {},
+			"method": "POST",
+			"data": [],
+			"dataMode": "raw",
+			"tests": null,
+			"currentHelper": "normal",
+			"helperAttributes": {},
+			"time": 1458657242873,
+			"name": "invite_into_chatroom",
+			"description": "",
+			"collectionId": "8ec2817e-5106-14fd-6900-fe2f17e2750a",
+			"responses": [],
+			"rawModeData": "{\n    \"roomId\": \"56f1451cd61a846ce4e3d661\",\n    \"inviteeId\": \"56d14e958241069d2f86eaf4\"\n}"
 		},
 		{
 			"id": "f5ac7db1-82d6-f8f1-fbf6-775e094cdeb1",

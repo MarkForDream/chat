@@ -22,7 +22,7 @@ TopicChatRoomModel.prototype.createTopicChatRoom = function(req, res, next) {
 
 			members.push({
 				user_id: req.user._id,
-				inviter: req.user_id,
+				inviter: req.user._id,
 				status: CONSTANT.JOINED
 			});
 
@@ -112,5 +112,43 @@ TopicChatRoomModel.prototype.respondChatRoom = function(req, res, next) {
 		});
 	
 };
+
+TopicChatRoomModel.prototype.inviteIntoChatRoom = function(req, res, next) {
+	req.checkBody('roomId', 'RoomId is required').notEmpty();
+	req.checkBody('roomId', 'The format of roomId is invalid').validateMongoID();
+
+	req.checkBody('inviteeId', 'InviteeId is required').notEmpty();
+	req.checkBody('inviteeId', 'The format of inviteeId is invalid').validateMongoID();
+
+	req.asyncValidationErrors()
+		.then(function() {
+			TopicChatRoom.findByIdAndUpdate(
+				req.body.roomId,
+				{
+					$push: {
+						"members": {
+							user_id: req.body.inviteeId,
+							inviter: req.user._id,
+							status: CONSTANT.PENDING
+						}
+					}
+				},
+				{
+					new : true
+				},
+				function(err, topicChatRoom) {
+					if (err) return res.json(ConfigError);
+
+					return next();
+				}
+			);
+		})
+		.catch(function(err) {
+			return res.json(ValidationErrorsResponse(err, {
+				roomId: null,
+				inviteeId: null
+			}));
+		});
+}
 
 module.exports = new TopicChatRoomModel();
